@@ -11,5 +11,6 @@ tiktoken
 huggingface-hub
 pypdf
 llama-cpp-python
+typing-extensions<4.6.0
 
 
