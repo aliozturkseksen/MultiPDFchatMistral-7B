@@ -10,7 +10,6 @@ from langchain.document_loaders import PyPDFLoader
 import os
 import tempfile
 
-
 def initialize_session_state():
     if 'history' not in st.session_state:
         st.session_state['history'] = []
@@ -20,14 +19,12 @@ def initialize_session_state():
 
     if 'past' not in st.session_state:
         st.session_state['past'] = ["Hey! 👋"]
-
-
+        
 def conversation_chat(query, chain, history):
     result = chain({"question": query, "chat_history": history})
     history.append((query, result["answer"]))
     return result["answer"]
-
-
+    
 def display_chat_history(chain):
     reply_container = st.container()
     container = st.container()
