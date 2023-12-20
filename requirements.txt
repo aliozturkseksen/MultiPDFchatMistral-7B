@@ -14,3 +14,4 @@ typing-extensions<4.6.0
 openai
 cohere
 pip==23.3.2
+pypdf
