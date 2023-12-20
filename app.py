@@ -54,8 +54,8 @@ def create_conversational_chain(vector_store):
     # Create llm
     llm = LlamaCpp(
     streaming = True,
-    model_path="mistral-7b-instruct-v0.1.Q4_K_M.gguf",
-    temperature=0.75,
+    model_path="mistral-7b-instruct-v0.1.Q8_0.gguf",
+    temperature=0.5,
     top_p=1, 
     verbose=True,
     n_ctx=4096
@@ -97,7 +97,7 @@ def main():
         text_chunks = text_splitter.split_documents(text)
 
         # Create embeddings
-        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", 
+        embeddings = HuggingFaceEmbeddings(model_name="mistral-7b-instruct-v0.1.Q8_0.gguf", 
                                            model_kwargs={'device': 'cpu'})
 
         # Create vector store
