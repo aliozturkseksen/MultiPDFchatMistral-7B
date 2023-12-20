@@ -11,8 +11,6 @@ import os
 import tempfile
 
 
-
-
 def initialize_session_state():
     if 'history' not in st.session_state:
         st.session_state['history'] = []
@@ -23,10 +21,12 @@ def initialize_session_state():
     if 'past' not in st.session_state:
         st.session_state['past'] = ["Hey! 👋"]
 
+
 def conversation_chat(query, chain, history):
     result = chain({"question": query, "chat_history": history})
     history.append((query, result["answer"]))
     return result["answer"]
+
 
 def display_chat_history(chain):
     reply_container = st.container()
@@ -50,9 +50,10 @@ def display_chat_history(chain):
                 message(st.session_state["past"][i], is_user=True, key=str(i) + '_user', avatar_style="thumbs")
                 message(st.session_state["generated"][i], key=str(i), avatar_style="fun-emoji")
 
+
 def create_conversational_chain(vector_store):
     # Create llm
-        llm = LlamaCpp(
+    llm = LlamaCpp(
         streaming=True,
         model_path="mistral-7b-instruct-v0.1.Q4_K_M.gguf",
         temperature=0.75,
@@ -64,9 +65,10 @@ def create_conversational_chain(vector_store):
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
     chain = ConversationalRetrievalChain.from_llm(llm=llm, chain_type='stuff',
-                                                 retriever=vector_store.as_retriever(search_kwargs={"k": 2}),
-                                                 memory=memory)
+                                                  retriever=vector_store.as_retriever(search_kwargs={"k": 2}),
+                                                  memory=memory)
     return chain
+
 
 def main():
     # Initialize session state
@@ -75,7 +77,6 @@ def main():
     # Initialize Streamlit
     st.sidebar.title("Document Processing")
     uploaded_files = st.sidebar.file_uploader("Upload files", accept_multiple_files=True)
-
 
     if uploaded_files:
         text = []
@@ -97,7 +98,7 @@ def main():
         text_chunks = text_splitter.split_documents(text)
 
         # Create embeddings
-        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", 
+        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
                                            model_kwargs={'device': 'cpu'})
 
         # Create vector store
@@ -106,8 +107,8 @@ def main():
         # Create the chain object
         chain = create_conversational_chain(vector_store)
 
-
         display_chat_history(chain)
+
 
 if __name__ == "__main__":
     main()
