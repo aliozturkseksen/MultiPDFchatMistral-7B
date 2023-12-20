@@ -54,13 +54,13 @@ def create_conversational_chain(vector_store):
     # Create llm
     llm = LlamaCpp(
     streaming = True,
-    model_path="mistral-7b-instruct-v0.1.Q8_0.gguf",
-    temperature=0.5,
+    model_path="mistral-7b-instruct-v0.1.Q4_K_M.gguf",
+    temperature=0.75,
     top_p=1, 
     verbose=True,
     n_ctx=4096
 )
-    
+
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
     chain = ConversationalRetrievalChain.from_llm(llm=llm, chain_type='stuff',
@@ -97,7 +97,7 @@ def main():
         text_chunks = text_splitter.split_documents(text)
 
         # Create embeddings
-        embeddings = HuggingFaceEmbeddings(model_name="mistral-7b-instruct-v0.1.Q8_0.gguf", 
+        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", 
                                            model_kwargs={'device': 'cpu'})
 
         # Create vector store
@@ -106,7 +106,7 @@ def main():
         # Create the chain object
         chain = create_conversational_chain(vector_store)
 
-        
+
         display_chat_history(chain)
 
 if __name__ == "__main__":
