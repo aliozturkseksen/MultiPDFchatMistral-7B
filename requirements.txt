@@ -1,6 +1,7 @@
 streamlit
 streamlit_chat
 langchain
+langchain_core
 torch
 accelerate
 sentence_transformers
